@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">TimeTracking</string>
+    <string name="end">Конец</string>
+    <string name="beginning">Начало</string>
+    <string name="Title">Название</string>
+    <string name="description">Описание</string>
+    <string name="place">Место</string>
+    <string name="notification">Уведомление</string>
+    <string name="category">Категория</string>
+    <string name="name_timeteble">Название</string>
+    <string name="buttonCreate">Create</string>
+</resources>
