@@ -15,7 +15,7 @@ abstract class TaskDatabase : RoomDatabase() {
     /**
      * Connects the database to the DAO.
      */
-    abstract val sleepDatabaseDao: TaskDatabaseDao
+    abstract val taskDatabaseDao: TaskDatabaseDao
 
     /**
      * Define a companion object, this allows us to add functions on the TaskDatabase class.

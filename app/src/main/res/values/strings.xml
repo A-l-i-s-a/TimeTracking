@@ -9,4 +9,6 @@
     <string name="category">Категория</string>
     <string name="name_timeteble">Название</string>
     <string name="buttonCreate">Create</string>
+    <string name="checkBoxTaskTodo">TODO</string>
+    <string name="checkBoxTaskDone">DONE</string>
 </resources>

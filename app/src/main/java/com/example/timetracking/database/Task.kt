@@ -12,9 +12,9 @@ data class Task(
     @ColumnInfo(name = "headline")
     val headline: String,
     @ColumnInfo(name = "time_beginning")
-    val timeBeginning: Calendar,
+    val timeBeginning: String = Calendar.getInstance().toString(),
     @ColumnInfo(name = "time_end")
-    val timeEnd: Calendar,
+    val timeEnd: String = Calendar.getInstance().toString(),
     @ColumnInfo(name = "place")
     val place: String,
     @ColumnInfo(name = "description")

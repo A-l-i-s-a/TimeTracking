@@ -18,48 +18,63 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:padding="10dp">
+            android:orientation="vertical">
+
+            <CheckBox
+                android:id="@+id/checkBoxTask"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/checkBoxTaskTodo"
+                android:textSize="14sp"
+                android:theme="@style/CheckBox" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:orientation="vertical"
-                android:padding="5dp">
+                android:orientation="horizontal"
+                android:padding="10dp">
 
-                <TextView
-                    android:id="@+id/textViewTimeBeginning"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:text="timeBeginning" />
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:orientation="vertical"
+                    android:padding="5dp">
 
-                <TextView
-                    android:id="@+id/textViewTimeEnd"
+                    <TextView
+                        android:id="@+id/textViewTimeBeginning"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="timeBeginning" />
+
+                    <TextView
+                        android:id="@+id/textViewTimeEnd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="timeEnd" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:text="timeEnd" />
-            </LinearLayout>
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="5dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:padding="5dp">
+                    <TextView
+                        android:id="@+id/textViewHeadline"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="headline" />
 
-                <TextView
-                    android:id="@+id/textViewHeadline"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:text="headline" />
-
-                <TextView
-                    android:id="@+id/textViewDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:text="description" />
+                    <TextView
+                        android:id="@+id/textViewDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="description" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
