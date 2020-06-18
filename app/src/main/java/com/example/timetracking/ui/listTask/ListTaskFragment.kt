@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -13,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.timetracking.R
 import com.example.timetracking.database.Task
 import com.example.timetracking.database.TaskDatabase
+import com.example.timetracking.ui.listTask.TaskAdapter.TaskViewHolder.Listener
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import timber.log.Timber
 
 class ListTaskFragment : Fragment() {
 
@@ -35,7 +36,25 @@ class ListTaskFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         viewModel.tasks.observe(viewLifecycleOwner, Observer {
-            recyclerView.adapter = TaskAdapter(it)
+            recyclerView.adapter = TaskAdapter(it, object : Listener {
+                override fun onItemClick(task: Task) {
+                    findNavController().navigate(
+                        R.id.action_listTaskFragment_to_taskFragment
+                    )
+                }
+
+                override fun onCheckedChangeListener(task: Task, isChecked: Boolean) {
+                    task.todoIsDone = isChecked
+                    viewModel.updateTask(task)
+                    Toast.makeText(
+                        context,
+                        isChecked.toString() + " : " + task.todoIsDone,
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                }
+
+            })
         })
 
         val floatingActionButton =

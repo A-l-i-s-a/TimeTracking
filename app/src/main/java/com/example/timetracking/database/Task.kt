@@ -1,10 +1,12 @@
 package com.example.timetracking.database
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.android.parcel.Parcelize
 import java.util.*
-
+@Parcelize
 @Entity(tableName = "task_table")
 data class Task(
     @PrimaryKey(autoGenerate = true)
@@ -18,5 +20,7 @@ data class Task(
     @ColumnInfo(name = "place")
     val place: String,
     @ColumnInfo(name = "description")
-    val description: String
-)
+    val description: String,
+    @ColumnInfo(name = "todo_is_done")
+    var todoIsDone: Boolean = false
+) : Parcelable
