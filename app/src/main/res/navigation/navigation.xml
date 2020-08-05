@@ -37,6 +37,9 @@
             app:destination="@id/taskFragment"
             app:popUpToInclusive="true"
             app:popUpTo="@id/taskFragment" />
+        <action
+            android:id="@+id/action_listTaskFragment_to_chartFragment"
+            app:destination="@id/chartFragment" />
     </fragment>
     <fragment
         android:id="@+id/addTaskFragment"
@@ -54,6 +57,15 @@
         tools:layout="@layout/task_fragment" >
         <action
             android:id="@+id/action_taskFragment_to_listTaskFragment"
+            app:destination="@id/listTaskFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chartFragment"
+        android:name="com.example.timetracking.ui.chart.ChartFragment"
+        android:label="fragment_chart"
+        tools:layout="@layout/fragment_chart" >
+        <action
+            android:id="@+id/action_chartFragment_to_listTaskFragment"
             app:destination="@id/listTaskFragment" />
     </fragment>
 </navigation>

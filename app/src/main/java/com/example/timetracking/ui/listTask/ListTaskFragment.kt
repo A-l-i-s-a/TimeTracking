@@ -4,10 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.Button
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,7 +30,7 @@ class ListTaskFragment : Fragment() {
         val application = requireNotNull(this.activity).application
         val dataSource = TaskDatabase.getInstance(application).taskDatabaseDao
         val viewModelFactory = ListTaskViewModelFactory(dataSource, application)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ListTaskViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(ListTaskViewModel::class.java)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
 
@@ -39,31 +40,28 @@ class ListTaskFragment : Fragment() {
             recyclerView.adapter = TaskAdapter(it, object : Listener {
                 override fun onItemClick(task: Task) {
                     findNavController().navigate(
-                        R.id.action_listTaskFragment_to_taskFragment
+                        R.id.action_listTaskFragment_to_taskFragment, bundleOf("task" to task)
                     )
                 }
 
-                override fun onCheckedChangeListener(task: Task, isChecked: Boolean) {
-                    task.todoIsDone = isChecked
+                override fun onCheckBoxClickListener(task: Task) {
                     viewModel.updateTask(task)
-                    Toast.makeText(
-                        context,
-                        isChecked.toString() + " : " + task.todoIsDone,
-                        Toast.LENGTH_LONG
-                    ).show()
-
                 }
-
             })
         })
 
         val floatingActionButton =
             view.findViewById<FloatingActionButton>(R.id.floatingActionButton)
-        floatingActionButton.setOnClickListener(View.OnClickListener {
+        floatingActionButton.setOnClickListener {
             this.findNavController().navigate(
                 R.id.action_listTaskFragment_to_addTaskFragment
             )
-        })
+        }
+
+        val chartButton = view.findViewById<Button>(R.id.chartButton)
+        chartButton.setOnClickListener {
+            findNavController().navigate(R.id.action_listTaskFragment_to_chartFragment)
+        }
         return view
     }
 }

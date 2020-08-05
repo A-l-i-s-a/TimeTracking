@@ -8,13 +8,61 @@
     tools:context=".ui.task.TaskFragment">
 
     <TextView
-        android:id="@+id/message"
-        android:layout_width="wrap_content"
+        android:id="@+id/headlineTask"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="MainFragment"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/timeBeginningTask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Time Beginning"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/todoIsDoneTask" />
+
+    <TextView
+        android:id="@+id/timeEndTask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Time End"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/timeBeginningTask"
+        app:layout_constraintTop_toBottomOf="@+id/todoIsDoneTask" />
+
+    <TextView
+        android:id="@+id/placeTask"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Place"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timeEndTask" />
+
+    <TextView
+        android:id="@+id/descriptionTask"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/placeTask" />
+
+    <TextView
+        android:id="@+id/todoIsDoneTask"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="todoIsDone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headlineTask" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -46,4 +46,15 @@ interface TaskDatabaseDao {
     @Query("SELECT * FROM task_table ORDER BY id DESC")
     fun getAllTasks(): LiveData<List<Task>>
 
+    /**
+     * Selects and returns rows of done tasks in the table.
+     */
+    @Query("SELECT * FROM task_table WHERE todo_is_done = 1 ORDER BY id DESC")
+    fun getDoneTasks(): List<Task>
+
+    /**
+     * Selects and returns rows of not done tasks in the table.
+     */
+    @Query("SELECT * FROM task_table WHERE todo_is_done = 0 ORDER BY id DESC")
+    fun getTodoTasks(): List<Task>
 }

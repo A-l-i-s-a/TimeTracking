@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.timetracking.R
 import com.example.timetracking.database.Task
@@ -47,15 +46,17 @@ class TaskAdapter(private val list: List<Task>, private val listener: TaskViewHo
             headline.text = task.headline
             description.text = task.description
             todoIsDone.isChecked = task.todoIsDone
-            todoIsDone.setOnCheckedChangeListener{ buttonView, isChecked ->
-                listener.onCheckedChangeListener(task, isChecked)
+            todoIsDone.setOnClickListener { v ->
+                task.todoIsDone = !task.todoIsDone
+                listener.onCheckBoxClickListener(task)
             }
+
             Timber.d("element is create: %s", task)
         }
 
         interface Listener {
             fun onItemClick(task: Task)
-            fun onCheckedChangeListener(task: Task, isChecked: Boolean)
+            fun onCheckBoxClickListener(task: Task)
         }
 
 
