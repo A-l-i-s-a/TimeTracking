@@ -4,12 +4,14 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 
 /**
  * A database that stores Task information.
  * And a global method to get access to the database.
  */
 @Database(entities = [Task::class], version = 2, exportSchema = false)
+@TypeConverters(DateConverters::class)
 abstract class TaskDatabase : RoomDatabase() {
 
     /**

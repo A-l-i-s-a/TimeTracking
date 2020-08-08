@@ -5,6 +5,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
+import java.time.OffsetDateTime
 import java.util.*
 
 @Parcelize
@@ -15,15 +16,13 @@ data class Task(
     @ColumnInfo(name = "headline")
     val headline: String = "New Task",
     @ColumnInfo(name = "time_beginning")
-    val timeBeginning: String = Calendar.getInstance().toString(),
+    val timeBeginning: OffsetDateTime = OffsetDateTime.now(),
     @ColumnInfo(name = "time_end")
-    val timeEnd: String = Calendar.getInstance().toString(),
+    val timeEnd: OffsetDateTime = OffsetDateTime.now(),
     @ColumnInfo(name = "place")
     val place: String = "",
     @ColumnInfo(name = "description")
     val description: String = "",
     @ColumnInfo(name = "todo_is_done")
-    var todoIsDone: Boolean = false,
-    @ColumnInfo(name = "date_done")
-    var dateDone: String = Date().toString()
+    var todoIsDone: Boolean = false
 ) : Parcelable

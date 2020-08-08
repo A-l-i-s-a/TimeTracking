@@ -45,7 +45,7 @@
         android:id="@+id/addTaskFragment"
         android:name="com.example.timetracking.ui.addTask.AddTaskFragment"
         android:label="add_task_fragment"
-        tools:layout="@layout/add_task_fragment" >
+        tools:layout="@layout/1" >
         <action
             android:id="@+id/action_addTaskFragment_to_listTaskFragment"
             app:destination="@id/listTaskFragment" />

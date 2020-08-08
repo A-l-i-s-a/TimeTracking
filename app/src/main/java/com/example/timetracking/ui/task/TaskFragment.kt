@@ -41,8 +41,8 @@ class TaskFragment : Fragment() {
             headline.text = task.headline
             description.text = task.description
             todoIsDone.text = if (task.todoIsDone) "DONE" else "TO DO"
-            timeBeginning.text = task.timeBeginning
-            timeEnd.text = task.timeEnd
+            timeBeginning.text = task.timeBeginning.toString()
+            timeEnd.text = task.timeEnd.toString()
             place.text = task.place
         }
         return view

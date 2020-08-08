@@ -14,7 +14,8 @@ class TaskAdapter(private val list: List<Task>, private val listener: TaskViewHo
     RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_task_item, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.list_task_item, parent, false)
         view.setOnClickListener { v ->
             listener.onItemClick(v.tag as Task)
         }
@@ -32,7 +33,7 @@ class TaskAdapter(private val list: List<Task>, private val listener: TaskViewHo
 
 
     class TaskViewHolder(v: View) :
-        RecyclerView.ViewHolder(v){
+        RecyclerView.ViewHolder(v) {
 
         private val beginning = v.findViewById<TextView>(R.id.textViewTimeBeginning)
         private val end = v.findViewById<TextView>(R.id.textViewTimeEnd)
@@ -41,12 +42,12 @@ class TaskAdapter(private val list: List<Task>, private val listener: TaskViewHo
         private var todoIsDone = v.findViewById<CheckBox>(R.id.checkBoxTask)
 
         fun bind(task: Task, listener: Listener) {
-            beginning.text = task.timeBeginning
-            end.text = task.timeEnd
+            beginning.text = String.format("%s:%s", task.timeBeginning.hour, task.timeBeginning.minute )
+            end.text = String.format("%s:%s", task.timeEnd.hour, task.timeEnd.minute )
             headline.text = task.headline
             description.text = task.description
             todoIsDone.isChecked = task.todoIsDone
-            todoIsDone.setOnClickListener { v ->
+            todoIsDone.setOnClickListener {
                 task.todoIsDone = !task.todoIsDone
                 listener.onCheckBoxClickListener(task)
             }

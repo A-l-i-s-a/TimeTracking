@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     style="@style/Item"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -27,18 +26,24 @@
                 style="@style/Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="@string/beginning" />
+
+            <TextView
+                android:id="@+id/inputDateBeginning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="center"
+                android:textAlignment="center"
+                />
 
             <TextView
                 android:id="@+id/inputTimeBeginning"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
                 android:ems="10"
-                android:text="8:10"
-                android:textAlignment="textEnd"
-                android:gravity="end" />
+                android:gravity="center"
+                android:textAlignment="center" />
 
         </TableRow>
 
@@ -51,18 +56,25 @@
                 style="@style/Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="@string/end" />
+
+            <TextView
+                android:id="@+id/inputDateEnd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="center"
+                android:textAlignment="center"
+                />
 
             <TextView
                 android:id="@+id/inputTimeEnd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
                 android:ems="10"
-                android:text="9:10"
-                android:textAlignment="textEnd"
-                android:gravity="end" />
+                android:gravity="center"
+                android:textAlignment="center"  />
+
         </TableRow>
 
     </TableLayout>
