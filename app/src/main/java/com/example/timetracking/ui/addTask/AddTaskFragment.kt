@@ -62,22 +62,39 @@ class AddTaskFragment : Fragment() {
         dateEnd.text = endDate.toString()
 
         dateBeginning.setOnClickListener {
-            beginningDate = onClickDate()
-            dateBeginning.text = formatDate(beginningDate)
+            onClickDate { date ->
+                run {
+                    beginningDate = date
+                    dateBeginning.text = formatDate(beginningDate)
+                }
+            }
         }
+
         dateEnd.setOnClickListener {
-            endDate = onClickDate()
-            dateEnd.text = formatDate(endDate)
+            onClickDate { date ->
+                run {
+                    endDate = date
+                    dateEnd.text = formatDate(endDate)
+                }
+            }
         }
 
         timeBeginning.setOnClickListener {
-            beginningTime = onClickTime()
-            timeBeginning.text = formatTime(beginningTime)
+            onClickTime { time ->
+                run {
+                    beginningTime = time
+                    timeBeginning.text = formatTime(beginningTime)
+                }
+            }
         }
 
         timeEnd.setOnClickListener {
-            endTime = onClickTime()
-            timeEnd.text = formatTime(endTime)
+            onClickTime { time ->
+                run {
+                    endTime = time
+                    timeEnd.text = formatTime(endTime)
+                }
+            }
         }
 
         button.setOnClickListener {
@@ -105,29 +122,27 @@ class AddTaskFragment : Fragment() {
         return view
     }
 
-    private fun onClickTime(): LocalTime {
+    private fun onClickTime(function: (LocalTime) -> Unit) {
         // Get Current Time
-        var now = LocalTime.now()
+        val now = LocalTime.now()
         val mHour = now.hour
         val mMinute = now.minute
 
         // Launch Time Picker Dialog
-        val timePickerDialog = TimePickerDialog(
+        TimePickerDialog(
             context,
             OnTimeSetListener { _, hourOfDay, minute ->
-                now = LocalTime.of(hourOfDay, minute)
+                function(LocalTime.of(hourOfDay, minute))
             },
             mHour,
             mMinute,
             true
-        )
-        timePickerDialog.show()
-        return now
+        ).show()
     }
 
-    private fun onClickDate(): LocalDate {
+    private fun onClickDate(function: (LocalDate) -> Unit) {
         // Get Current Date
-        var now = LocalDate.now()
+        val now = LocalDate.now()
         val mDay = now.dayOfMonth
         val mMonth = now.month.value
         val mYear = now.year
@@ -136,21 +151,19 @@ class AddTaskFragment : Fragment() {
         context?.let {
             DatePickerDialog(
                 it,
-                OnDateSetListener() { _, year, month, day ->
-                    now = LocalDate.of(year, month, day)
+                OnDateSetListener { _, year, month, day ->
+                    function(LocalDate.of(year, month, day))
                 },
                 mYear,
                 mMonth,
                 mDay
             )
         }?.show()
-
-        return now
     }
 
     private fun formatDate(date: LocalDate): String {
         return String.format(
-            "%s.%s.%s",
+            "%s %s %s",
             date.dayOfMonth,
             date.month,
             date.year
