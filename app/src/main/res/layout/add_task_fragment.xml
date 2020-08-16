@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/Title"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:autofillHints="" />
 
     <TableLayout
         android:layout_width="match_parent"
@@ -34,8 +35,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:gravity="center"
-                android:textAlignment="center"
-                />
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/inputTimeBeginning"
@@ -64,8 +64,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:gravity="center"
-                android:textAlignment="center"
-                />
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/inputTimeEnd"
@@ -73,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:gravity="center"
-                android:textAlignment="center"  />
+                android:textAlignment="center" />
 
         </TableRow>
 
@@ -85,21 +84,26 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/place"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/editTextDescription"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:autofillHints=""
         android:gravity="start|top"
         android:hint="@string/description"
-        android:inputType="textMultiLine" />
+        android:inputType="textMultiLine"
+        android:scrollbars="vertical"
+        android:verticalScrollbarPosition="defaultPosition" />
 
     <Button
         android:id="@+id/buttonCreateTask"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="3.5"
         android:text="@string/buttonCreate" />
 
 </LinearLayout>

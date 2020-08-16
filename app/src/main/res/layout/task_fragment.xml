@@ -22,40 +22,49 @@
                 style="@style/Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp" />
+                android:layout_marginTop="8dp"
+                android:paddingStart="30dp" />
 
             <TextView
                 android:id="@+id/timeBeginningTask"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="Time Beginning" />
+                android:hint="Time Beginning"
+                android:paddingStart="30dp" />
 
             <TextView
                 android:id="@+id/timeEndTask"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Time End" />
+                android:hint="Time End"
+                android:paddingStart="30dp" />
 
             <TextView
                 android:id="@+id/placeTask"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="Place" />
+                android:drawableStart="@android:drawable/ic_dialog_map"
+                android:hint="Place"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp" />
+
+            <TextView
+                android:id="@+id/todoIsDoneTask"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="todoIsDone"
+                android:paddingStart="30dp" />
 
             <TextView
                 android:id="@+id/descriptionTask"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:drawableLeft="@android:drawable/ic_menu_sort_by_size"
                 android:hint="Description" />
 
-            <TextView
-                android:id="@+id/todoIsDoneTask"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="todoIsDone" />
         </LinearLayout>
     </ScrollView>
 
