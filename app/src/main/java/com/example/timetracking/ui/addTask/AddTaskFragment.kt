@@ -16,6 +16,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.timetracking.R
 import com.example.timetracking.database.Task
 import com.example.timetracking.database.TaskDatabase
+import com.example.timetracking.util.formatDate
+import com.example.timetracking.util.formatTime
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.LocalTime
@@ -55,11 +57,11 @@ class AddTaskFragment : Fragment() {
         var beginningTime: LocalTime = LocalTime.now()
         var endTime: LocalTime = LocalTime.now()
 
-        timeBeginning.text = beginningTime.toString()
-        timeEnd.text = endTime.toString()
+        timeBeginning.text = formatTime(beginningTime)
+        timeEnd.text = formatTime(endTime)
 
-        dateBeginning.text = beginningDate.toString()
-        dateEnd.text = endDate.toString()
+        dateBeginning.text = formatDate(beginningDate)
+        dateEnd.text = formatDate(endDate)
 
         dateBeginning.setOnClickListener {
             onClickDate { date ->
@@ -144,7 +146,7 @@ class AddTaskFragment : Fragment() {
         // Get Current Date
         val now = LocalDate.now()
         val mDay = now.dayOfMonth
-        val mMonth = now.month.value
+        val mMonth = now.month.ordinal
         val mYear = now.year
 
         // Launch Date Picker Dialog
@@ -161,20 +163,5 @@ class AddTaskFragment : Fragment() {
         }?.show()
     }
 
-    private fun formatDate(date: LocalDate): String {
-        return String.format(
-            "%s %s %s",
-            date.dayOfMonth,
-            date.month,
-            date.year
-        )
-    }
 
-    private fun formatTime(time: LocalTime): String {
-        return String.format(
-            "%s:%s",
-            time.hour,
-            time.minute
-        )
-    }
 }

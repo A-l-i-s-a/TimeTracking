@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.timetracking.R
 import com.example.timetracking.database.Task
 import com.example.timetracking.database.TaskDatabase
+import com.example.timetracking.util.formatDateTime
+import com.example.timetracking.util.formatTime
 
 class TaskFragment : Fragment() {
 
@@ -37,12 +39,11 @@ class TaskFragment : Fragment() {
         val task: Task
         if (bundle != null) {
             task = bundle.get("task") as Task
-            println("task = $task")
             headline.text = task.headline
             description.text = task.description
             todoIsDone.text = if (task.todoIsDone) "DONE" else "TO DO"
-            timeBeginning.text = task.timeBeginning.toString()
-            timeEnd.text = task.timeEnd.toString()
+            timeBeginning.text = formatDateTime(task.timeBeginning)
+            timeEnd.text = formatDateTime(task.timeEnd)
             place.text = task.place
         }
         return view

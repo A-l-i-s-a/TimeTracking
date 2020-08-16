@@ -37,7 +37,6 @@ class TaskViewModel(
     fun findTaskById(id: Long) {
         uiScope.launch {
             _task = getTask(id)
-            println("_task = $_task")
         }
     }
 

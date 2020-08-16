@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import java.time.OffsetDateTime
 
 /**
  * Defines methods for using the Task class with Room.
@@ -57,4 +58,10 @@ interface TaskDatabaseDao {
      */
     @Query("SELECT * FROM task_table WHERE todo_is_done = 0 ORDER BY id DESC")
     fun getTodoTasks(): List<Task>
+
+    /**
+     * Selects and returns rows by date tasks in the table.
+     */
+    @Query("SELECT * FROM task_table WHERE date(time_beginning) = date(:date) ORDER BY id DESC")
+    fun getTaskByDate(date: OffsetDateTime): LiveData<List<Task>>
 }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/dayOrNight"
+        android:icon="@drawable/dn"
+        android:title="@string/dayOrNight"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/item4"
+        android:icon="@android:drawable/ic_menu_view"
+        android:title="item4"
+        app:showAsAction="never">
+    </item>
+</menu>
