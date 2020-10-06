@@ -12,7 +12,6 @@ import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.utils.ColorTemplate.PASTEL_COLORS
-import java.util.*
 
 class ChartFragment : Fragment() {
 
@@ -43,30 +42,30 @@ class ChartFragment : Fragment() {
         pieChart.data = pieData
         pieChart.invalidate()
 
-        val barChart = view.findViewById<BarChart>(R.id.barChart)
-        val barEntryTodo =
-            listOf<BarEntry>(BarEntry(0F, (viewModel.findTodoTasks().size).toFloat()))
+        val barChartDone = view.findViewById<BarChart>(R.id.barChartDone)
         val barEntryDone =
-            listOf<BarEntry>(BarEntry(1F, (viewModel.findDoneTasks().size).toFloat()))
+            listOf<BarEntry>(BarEntry(0F, (viewModel.findDoneTasks().size).toFloat()))
 
-        val listBarDataSet = mutableListOf<BarDataSet>()
-        val doneTasksOnEachDay = viewModel.getDoneTasksOnEachDay()
-        var i = 0F
-        for (key in doneTasksOnEachDay.keys) {
-            val barEntry = doneTasksOnEachDay[key]?.let { BarEntry(i, it) }
-            listBarDataSet.add(BarDataSet(listOf(barEntry), key))
-            i++
-        }
+        val barDataSet = BarDataSet(barEntryDone, "Done")
+        val barData = BarData(barDataSet)
 
-        val barData = BarData(listBarDataSet.toList())
+        barChartDone.data = barData
+        barChartDone.invalidate()
 
-        barChart.data = barData
-        barChart.invalidate()
+        val barChartTodo = view.findViewById<BarChart>(R.id.barChartTodo)
+        val barEntryTodo =
+            listOf<BarEntry>(BarEntry(1F, (viewModel.findTodoTasks().size).toFloat()))
+        val barDataSetTodo = BarDataSet(barEntryTodo, "Todo")
+        val barDataTodo = BarData(barDataSetTodo)
 
-        println(Calendar.getInstance().toString())
-        println(viewModel.findTodoTasks())
+        barChartTodo.data = barDataTodo
+        barChartTodo.invalidate()
 
         return view
+    }
+
+    fun setBarEntry(): List<BarEntry> {
+        return  listOf<BarEntry>()
     }
 
 }
