@@ -6,7 +6,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 import java.time.OffsetDateTime
-import java.util.*
 
 @Parcelize
 @Entity(tableName = "task_table")
@@ -24,5 +23,7 @@ data class Task(
     @ColumnInfo(name = "description")
     val description: String = "",
     @ColumnInfo(name = "todo_is_done")
-    var todoIsDone: Boolean = false
+    var todoIsDone: Boolean = false,
+    @ColumnInfo(name = "notification")
+    var notification: Notification? = null
 ) : Parcelable

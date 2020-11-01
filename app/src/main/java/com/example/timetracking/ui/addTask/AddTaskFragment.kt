@@ -2,29 +2,35 @@ package com.example.timetracking.ui.addTask
 
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.TimePickerDialog
 import android.app.TimePickerDialog.OnTimeSetListener
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.example.timetracking.R
 import com.example.timetracking.database.Task
 import com.example.timetracking.database.TaskDatabase
+import com.example.timetracking.ui.dialog.CreateNotificationDialogFragment
 import com.example.timetracking.util.formatDate
 import com.example.timetracking.util.formatTime
+import kotlinx.android.synthetic.main.add_task_fragment.view.*
+import kotlinx.android.synthetic.main.create_notification.*
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.OffsetDateTime
 
 
-class AddTaskFragment : Fragment() {
+class AddTaskFragment : Fragment(), CreateNotificationDialogFragment.CreateNotificationDialogListener {
 
     companion object {
         fun newInstance() = AddTaskFragment()
@@ -43,14 +49,14 @@ class AddTaskFragment : Fragment() {
         val viewModelFactory = AddTaskViewModelFactory(dataSource, application)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddTaskViewModel::class.java)
 
-        val button = view.findViewById<Button>(R.id.buttonCreateTask)
-        val headline = view.findViewById<TextView>(R.id.editTextHeadline)
-        val description = view.findViewById<TextView>(R.id.editTextDescription)
-        val place = view.findViewById<TextView>(R.id.editTextPlace)
-        val timeBeginning = view.findViewById<TextView>(R.id.inputTimeBeginning)
-        val timeEnd = view.findViewById<TextView>(R.id.inputTimeEnd)
-        val dateBeginning = view.findViewById<TextView>(R.id.inputDateBeginning)
-        val dateEnd = view.findViewById<TextView>(R.id.inputDateEnd)
+        val button = view.buttonCreateTask
+        val headline = view.editTextHeadline
+        val description = view.editTextDescription
+        val place = view.editTextPlace
+        val timeBeginning = view.inputTimeBeginning
+        val timeEnd = view.inputTimeEnd
+        val dateBeginning = view.inputDateBeginning
+        val dateEnd = view.inputDateEnd
 
         var beginningDate: LocalDate = LocalDate.now()
         var endDate: LocalDate = LocalDate.now()
@@ -121,6 +127,19 @@ class AddTaskFragment : Fragment() {
             this.findNavController().popBackStack()
         }
 
+        view.switchNotification.setOnCheckedChangeListener { buttonView, isChecked ->
+            run {
+                if (isChecked) {
+                    showCreateNotificationDialogDialog()
+                }
+            }
+        }
+
+        createChannel(
+            getString(R.string.notification_channel_id),
+            getString(R.string.notification_channel_name)
+        )
+
         return view
     }
 
@@ -163,5 +182,37 @@ class AddTaskFragment : Fragment() {
         }?.show()
     }
 
+    private fun createChannel(channelId: String, channelName: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(
+                channelId,
+                channelName,
+                NotificationManager.IMPORTANCE_HIGH
+            )
+                .apply {
+                    setShowBadge(false)
+                }
+            notificationChannel.enableLights(true)
+            notificationChannel.lightColor = Color.RED
+            notificationChannel.enableVibration(true)
+            notificationChannel.description = "description"
+
+            val notificationManager = requireActivity().getSystemService(
+                NotificationManager::class.java
+            )
+
+            notificationManager.createNotificationChannel(notificationChannel)
+        }
+    }
+
+    fun showCreateNotificationDialogDialog() {
+        val dialog: DialogFragment = CreateNotificationDialogFragment()
+        activity?.supportFragmentManager?.let { dialog.show(it, "CreateNotificationDialogFragment") }
+    }
+
+    override fun onDialogPositiveClick(dialogFragment: DialogFragment) {
+        val radioGroup = dialogFragment.radioGroup
+        radioGroup.checkedRadioButtonId
+    }
 
 }

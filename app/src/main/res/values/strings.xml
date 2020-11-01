@@ -12,6 +12,9 @@
     <string name="checkBoxTaskTodo">TODO</string>
     <string name="checkBoxTaskDone">DONE</string>
 
+    <string name="notification_channel_id" translatable="false">egg_channel</string>
+    <string name="notification_channel_name" translatable="true">Egg</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="byDate">By date</string>
@@ -20,4 +23,11 @@
     <string name="done">Done</string>
     <string name="today">Today</string>
     <string name="dayOrNight">Day or Night</string>
+    <string name="notification_title">Time Tracking</string>
+    <string name="defaultTime">5</string>
+    <string name="min">мин. до</string>
+    <string name="hour">ч.</string>
+    <string name="day">дн.</string>
+    <string name="ok">OK</string>
+    <string name="week">нед.</string>
 </resources>

@@ -1,11 +1,12 @@
 package com.example.timetracking.ui.addTask
 
 import android.app.Application
+import android.app.NotificationManager
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.timetracking.database.Task
 import com.example.timetracking.database.TaskDatabaseDao
+import com.example.timetracking.util.sendNotification
 import kotlinx.coroutines.*
 import timber.log.Timber
 
@@ -33,10 +34,16 @@ class AddTaskViewModel(
         }
     }
 
-    fun addTask(task: Task){
+    fun addTask(task: Task) {
         uiScope.launch {
             insert(task)
         }
+        val notificationManager = ContextCompat.getSystemService(
+            getApplication(),
+            NotificationManager::class.java
+        ) as NotificationManager
+
+        notificationManager.sendNotification("Add task", getApplication(), task.id)
     }
 
 }

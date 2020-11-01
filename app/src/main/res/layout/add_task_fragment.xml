@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/Item"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -87,6 +88,13 @@
         android:inputType="textPersonName"
         android:importantForAutofill="no" />
 
+    <Switch
+        android:id="@+id/switchNotification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/notification"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
     <EditText
         android:id="@+id/editTextDescription"
         android:layout_width="match_parent"
@@ -103,7 +111,7 @@
         android:id="@+id/buttonCreateTask"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="3.5"
+        android:layout_weight="3"
         android:text="@string/buttonCreate" />
 
 </LinearLayout>
