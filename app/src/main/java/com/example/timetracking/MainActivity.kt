@@ -10,8 +10,10 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.timetracking.util.APP_ACTIVITY
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,6 +25,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
         return true
+    }
+
+    override fun onStart() {
+        super.onStart()
+        APP_ACTIVITY = this
     }
 
 //    override fun onOptionsItemSelected(item: MenuItem): Boolean {

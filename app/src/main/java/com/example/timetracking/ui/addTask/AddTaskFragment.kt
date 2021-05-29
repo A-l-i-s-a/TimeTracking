@@ -6,128 +6,154 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.TimePickerDialog
 import android.app.TimePickerDialog.OnTimeSetListener
+import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.content.FileProvider
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.timetracking.R
 import com.example.timetracking.database.Task
-import com.example.timetracking.database.TaskDatabase
+import com.example.timetracking.ui.AttachAdapter
 import com.example.timetracking.ui.dialog.CreateNotificationDialogFragment
-import com.example.timetracking.util.formatDate
-import com.example.timetracking.util.formatTime
+import com.example.timetracking.util.*
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.theartofdev.edmodo.cropper.CropImage
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.add_task_fragment.*
 import kotlinx.android.synthetic.main.add_task_fragment.view.*
+import kotlinx.android.synthetic.main.choice_upload.*
 import kotlinx.android.synthetic.main.create_notification.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import timber.log.Timber
+import java.io.File
+import java.lang.IllegalArgumentException
+import java.sql.Timestamp
 import java.time.LocalDate
 import java.time.LocalTime
-import java.time.OffsetDateTime
+import java.util.*
 
-
-class AddTaskFragment : Fragment(), CreateNotificationDialogFragment.CreateNotificationDialogListener {
+@AndroidEntryPoint
+@ExperimentalCoroutinesApi
+class AddTaskFragment : Fragment(),
+    CreateNotificationDialogFragment.CreateNotificationDialogListener {
 
     companion object {
         fun newInstance() = AddTaskFragment()
     }
 
-    private lateinit var viewModel: AddTaskViewModel
+    private val viewModel: AddTaskViewModel by viewModels()
+    private lateinit var mBottomSheetBehavior: BottomSheetBehavior<*>
+    private val attach: MutableList<Uri> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.add_task_fragment, container, false)
+        return inflater.inflate(R.layout.add_task_fragment, container, false)
+    }
 
-        val application = requireNotNull(this.activity).application
-        val dataSource = TaskDatabase.getInstance(application).taskDatabaseDao
-        val viewModelFactory = AddTaskViewModelFactory(dataSource, application)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddTaskViewModel::class.java)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        subscribeObservers()
 
-        val button = view.buttonCreateTask
-        val headline = view.editTextHeadline
-        val description = view.editTextDescription
-        val place = view.editTextPlace
-        val timeBeginning = view.inputTimeBeginning
-        val timeEnd = view.inputTimeEnd
-        val dateBeginning = view.inputDateBeginning
-        val dateEnd = view.inputDateEnd
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet_choice)
+        mBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+        btn_attach.setOnClickListener { attach() }
+
+        attachRecyclerView.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        attachRecyclerView.adapter = AttachAdapter(attach, object : AttachAdapter.Listener {
+            override fun onItemClick(uri: Uri) {
+                try {
+                    val newURI = FileProvider.getUriForFile(
+                        context!!,
+                        context!!.applicationContext.packageName.toString() + ".provider",
+                        File(uri.path)
+                    )
+                    val intent = Intent()
+                    intent.action = Intent.ACTION_VIEW
+                    intent.setDataAndType(newURI, "*/*")
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    startActivity(intent)
+                } catch (e: IllegalArgumentException) {
+                    displayError(e.localizedMessage)
+                }
+            }
+        })
 
         var beginningDate: LocalDate = LocalDate.now()
         var endDate: LocalDate = LocalDate.now()
         var beginningTime: LocalTime = LocalTime.now()
         var endTime: LocalTime = LocalTime.now()
 
-        timeBeginning.text = formatTime(beginningTime)
-        timeEnd.text = formatTime(endTime)
+        inputTimeBeginning.text = formatTime(beginningTime)
+        inputTimeEnd.text = formatTime(endTime)
 
-        dateBeginning.text = formatDate(beginningDate)
-        dateEnd.text = formatDate(endDate)
+        inputDateBeginning.text = formatDate(beginningDate)
+        inputDateEnd.text = formatDate(endDate)
 
-        dateBeginning.setOnClickListener {
+        inputDateBeginning.setOnClickListener {
             onClickDate { date ->
                 run {
                     beginningDate = date
-                    dateBeginning.text = formatDate(beginningDate)
+                    inputDateBeginning.text = formatDate(beginningDate)
                 }
             }
         }
 
-        dateEnd.setOnClickListener {
+        inputDateEnd.setOnClickListener {
             onClickDate { date ->
                 run {
                     endDate = date
-                    dateEnd.text = formatDate(endDate)
+                    inputDateEnd.text = formatDate(endDate)
                 }
             }
         }
 
-        timeBeginning.setOnClickListener {
+        inputTimeBeginning.setOnClickListener {
             onClickTime { time ->
                 run {
                     beginningTime = time
-                    timeBeginning.text = formatTime(beginningTime)
+                    inputTimeBeginning.text = formatTime(beginningTime)
                 }
             }
         }
 
-        timeEnd.setOnClickListener {
+        inputTimeEnd.setOnClickListener {
             onClickTime { time ->
                 run {
                     endTime = time
-                    timeEnd.text = formatTime(endTime)
+                    inputTimeEnd.text = formatTime(endTime)
                 }
             }
         }
 
-        button.setOnClickListener {
-            viewModel.addTask(
+        buttonCreateTask.setOnClickListener {
+            viewModel.createTask(
                 Task(
-                    headline = headline.text.toString(),
-                    place = place.text.toString(),
-                    description = description.text.toString(),
-                    timeBeginning = OffsetDateTime.of(
-                        beginningDate,
-                        beginningTime,
-                        OffsetDateTime.now().offset
-                    ),
-                    timeEnd = OffsetDateTime.of(
-                        endDate,
-                        endTime,
-                        OffsetDateTime.now().offset
-                    )
+                    headline = editTextHeadline.text.toString(),
+                    place = editTextPlace.text.toString(),
+                    description = editTextDescription.text.toString(),
+                    timeBeginning = Timestamp(LocalTime.now().toNanoOfDay()),
+                    timeEnd = Timestamp(LocalTime.now().toNanoOfDay())
                 )
             )
             Timber.i("click on button 'Create'")
             this.findNavController().popBackStack()
         }
 
-        view.switchNotification.setOnCheckedChangeListener { buttonView, isChecked ->
+        switchNotification.setOnCheckedChangeListener { buttonView, isChecked ->
             run {
                 if (isChecked) {
                     showCreateNotificationDialogDialog()
@@ -139,8 +165,95 @@ class AddTaskFragment : Fragment(), CreateNotificationDialogFragment.CreateNotif
             getString(R.string.notification_channel_id),
             getString(R.string.notification_channel_name)
         )
+    }
 
-        return view
+    private fun attach() {
+        mBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+
+        btn_attach_file.setOnClickListener { attachFile() }
+        btn_attach_image.setOnClickListener { attachImage() }
+    }
+
+    private fun attachFile() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "*/*"
+        startActivityForResult(intent, PICK_FILE_REQUEST_CODE)
+    }
+
+    private fun attachImage() {
+        CropImage.activity()
+            .start(APP_ACTIVITY, this)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (data != null) {
+            when (requestCode) {
+                CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
+                    val activityResult = CropImage.getActivityResult(data)
+                    activityResult.uri.lastPathSegment?.let {
+                        attach.add(activityResult.uri)
+                    }
+                }
+                PICK_FILE_REQUEST_CODE -> {
+                    val uri = data.data
+                    uri?.let {
+                        attach.add(getUriFile(uri))
+                    }
+                }
+            }
+        }
+    }
+
+    private fun subscribeObservers() {
+        viewModel.dataState.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            when (it) {
+                is DataState.Success<Task> -> {
+                    displayProgressBar(false)
+                }
+                is DataState.Error -> {
+                    displayProgressBar(false)
+                    displayError(it.exception.message)
+                }
+                is DataState.Loading -> {
+                    displayProgressBar(true)
+                }
+            }
+        })
+    }
+
+    private fun getNewTask(): Task {
+        var calendar: Calendar = Calendar.getInstance()
+        val bundle: Bundle? = arguments
+        if (bundle != null) {
+            calendar = bundle.get("date") as Calendar
+        }
+
+        val dateStart: Timestamp? = Timestamp(LocalDate.now().toEpochDay())
+//            Timestamp(calendar.timeInMillis + timeStrToMillis(editTextAddStartTime.text.toString())) // editTextStartTime
+        val dateFinish: Timestamp? = Timestamp(LocalDate.now().toEpochDay())
+//            Timestamp(calendar.timeInMillis + timeStrToMillis(editTextAddFinishTime.text.toString())) // editTextFinishTime
+        val name: String = "name" //editTextTitle.text.toString()
+        val description: String = editTextDescription.text.toString()
+        return Task(
+            timeBeginning = dateStart,
+            timeEnd = dateFinish,
+            headline = name,
+            description = description,
+            attachments = attach
+        )
+    }
+
+    private fun displayError(message: String?) {
+        if (message != null) {
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(context, "Unknown error", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun displayProgressBar(isDisplay: Boolean) {
+        progressBar2.visibility = if (isDisplay) View.VISIBLE else View.GONE
     }
 
     private fun onClickTime(function: (LocalTime) -> Unit) {
@@ -207,7 +320,12 @@ class AddTaskFragment : Fragment(), CreateNotificationDialogFragment.CreateNotif
 
     fun showCreateNotificationDialogDialog() {
         val dialog: DialogFragment = CreateNotificationDialogFragment()
-        activity?.supportFragmentManager?.let { dialog.show(it, "CreateNotificationDialogFragment") }
+        activity?.supportFragmentManager?.let {
+            dialog.show(
+                it,
+                "CreateNotificationDialogFragment"
+            )
+        }
     }
 
     override fun onDialogPositiveClick(dialogFragment: DialogFragment) {

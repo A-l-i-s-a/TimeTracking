@@ -1,49 +1,35 @@
 package com.example.timetracking.ui.addTask
 
-import android.app.Application
-import android.app.NotificationManager
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.AndroidViewModel
+import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.timetracking.database.Task
-import com.example.timetracking.database.TaskDatabaseDao
-import com.example.timetracking.util.sendNotification
+import com.example.timetracking.repository.TaskRepository
+import com.example.timetracking.util.DataState
 import kotlinx.coroutines.*
-import timber.log.Timber
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
-class AddTaskViewModel(
-    private val database: TaskDatabaseDao,
-    application: Application
-) : AndroidViewModel(application) {
+@ExperimentalCoroutinesApi
+class AddTaskViewModel @ViewModelInject constructor(
+    private val taskRepository: TaskRepository
+) : ViewModel() {
 
-    /** Coroutine setup variables */
+    private val _dataState: MutableLiveData<DataState<Task>> = MutableLiveData()
 
-    /**
-     * viewModelJob allows us to cancel all coroutines started by this ViewModel.
-     */
-    private val viewModelJob = Job()
+    val dataState: LiveData<DataState<Task>>
+        get() = _dataState
 
-    /**
-     * A [CoroutineScope] keeps track of all coroutines started by this ViewModel.
-     */
-    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
-
-    private suspend fun insert(task: Task) {
-        withContext(Dispatchers.IO) {
-            database.insert(task)
-            Timber.i("Insert task")
+    fun createTask(task: Task) {
+        viewModelScope.launch {
+            taskRepository.createTask(task)
+                .onEach { dataState ->
+                    _dataState.value = dataState
+                }
+                .launchIn(viewModelScope)
         }
-    }
-
-    fun addTask(task: Task) {
-        uiScope.launch {
-            insert(task)
-        }
-        val notificationManager = ContextCompat.getSystemService(
-            getApplication(),
-            NotificationManager::class.java
-        ) as NotificationManager
-
-        notificationManager.sendNotification("Add task", getApplication(), task.id)
     }
 
 }

@@ -1,118 +1,144 @@
 package com.example.timetracking.ui.listTask
 
-import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.timetracking.R
 import com.example.timetracking.database.Task
-import com.example.timetracking.database.TaskDatabase
-import com.example.timetracking.ui.listTask.TaskAdapter.TaskViewHolder.Listener
-import com.google.android.material.chip.Chip
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.time.LocalDate
-import java.time.OffsetDateTime
+import com.example.timetracking.util.DataState
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.list_task_fragment.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@AndroidEntryPoint
+@ExperimentalCoroutinesApi
 class ListTaskFragment : Fragment() {
 
-    private lateinit var viewModel: ListTaskViewModel
+    companion object {
+        fun newInstance() = ListTaskFragment()
+    }
+
+    private val viewModel: ListTaskViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view: View = inflater.inflate(R.layout.list_task_fragment, container, false)
-        val application = requireNotNull(this.activity).application
-        val dataSource = TaskDatabase.getInstance(application).taskDatabaseDao
-        val viewModelFactory = ListTaskViewModelFactory(dataSource, application)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(ListTaskViewModel::class.java)
+        return inflater.inflate(R.layout.list_task_fragment, container, false)
+    }
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
-
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        subscribeObservers()
         recyclerView.layoutManager = LinearLayoutManager(context)
+        val listTasksStateEvent = ListTasksStateEvent.GetTaskByDateEvents
+        viewModel.setStateEvent(listTasksStateEvent)
 
-        val taskListener = object : Listener {
-            override fun onItemClick(task: Task) {
-                findNavController().navigate(
-                    R.id.action_listTaskFragment_to_taskFragment, bundleOf("task" to task)
-                )
-            }
-
-            override fun onCheckBoxClickListener(task: Task) {
-                viewModel.updateTask(task)
-            }
-        }
-
-        viewModel.tasks.observe(viewLifecycleOwner, Observer {
-            recyclerView.adapter = TaskAdapter(it, taskListener)
-        })
-
-        val chartButton = view.findViewById<Button>(R.id.chartButton)
+//        var selectCalendar: Calendar = Calendar.getInstance()
+//        calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
+//            selectCalendar = GregorianCalendar(year, month, dayOfMonth)
+//            listTasksStateEvent.date = selectCalendar.timeInMillis
+//            viewModel.setStateEvent(listTasksStateEvent)
+//        }
         chartButton.setOnClickListener {
             findNavController().navigate(R.id.action_listTaskFragment_to_chartFragment)
         }
 
-        view.findViewById<Chip>(R.id.chipAll).setOnClickListener {
-            viewModel.tasks.observe(viewLifecycleOwner, Observer {
-                recyclerView.adapter = TaskAdapter(it, taskListener)
-            })
-        }
-        view.findViewById<Chip>(R.id.chipToday).setOnClickListener {
-            viewModel.getTaskByDate(OffsetDateTime.now()).observe(viewLifecycleOwner, Observer {
-                recyclerView.adapter = TaskAdapter(it, taskListener)
-            })
-        }
-        view.findViewById<Chip>(R.id.chipDone).setOnClickListener {
-            recyclerView.adapter = TaskAdapter(viewModel.doneTasks, taskListener)
-        }
-        view.findViewById<Chip>(R.id.chipTodo).setOnClickListener {
-
-            recyclerView.adapter = TaskAdapter(viewModel.todoTasks, taskListener)
-        }
-        var date = OffsetDateTime.now()
-        view.findViewById<Chip>(R.id.chipByDate).setOnClickListener {
-            val now = LocalDate.now()
-            val mDay = now.dayOfMonth
-            val mMonth = now.month.ordinal
-            val mYear = now.year
-
-            // Launch Date Picker Dialog
-            context?.let {
-                DatePickerDialog(
-                    it,
-                    DatePickerDialog.OnDateSetListener { _, year, month, day ->
-                        date = date.withYear(year)
-                        date = date.withMonth(month + 1)
-                        date = date.withDayOfMonth(day)
-                        viewModel.getTaskByDate(date).observe(viewLifecycleOwner, Observer { list ->
-                            recyclerView.adapter = TaskAdapter(list, taskListener)
-                        })
-                    },
-                    mYear,
-                    mMonth,
-                    mDay
-                )
-            }?.show()
+        uploadImageView.setOnClickListener {
+            viewModel.setStateEvent(ListTasksStateEvent.Synchronization)
         }
 
+        chipAll.setOnClickListener {
+            viewModel.setStateEvent(ListTasksStateEvent.GetAllTasksEvents)
+        }
+        chipToday.setOnClickListener {
+            viewModel.setStateEvent(listTasksStateEvent)
+        }
+        chipDone.setOnClickListener {
+            viewModel.setStateEvent(ListTasksStateEvent.GetDoneTasksEvents)
+        }
+        chipTodo.setOnClickListener {
+            viewModel.setStateEvent(ListTasksStateEvent.GetTodoTasksEvents)
+        }
+//        var date = OffsetDateTime.now()
+//        chipByDate.setOnClickListener {
+//            val now = LocalDate.now()
+//            val mDay = now.dayOfMonth
+//            val mMonth = now.month.ordinal
+//            val mYear = now.year
+//
+//            // Launch Date Picker Dialog
+//            context?.let {
+//                DatePickerDialog(
+//                    it,
+//                    DatePickerDialog.OnDateSetListener { _, year, month, day ->
+//                        date = date.withYear(year)
+//                        date = date.withMonth(month + 1)
+//                        date = date.withDayOfMonth(day)
+//                        viewModel.getTaskByDate(date).observe(viewLifecycleOwner, Observer { list ->
+//                            recyclerView.adapter = TaskAdapter(list, taskListener)
+//                        })
+//                    },
+//                    mYear,
+//                    mMonth,
+//                    mDay
+//                )
+//            }?.show()
+//        }
 
-        val floatingActionButton =
-            view.findViewById<FloatingActionButton>(R.id.floatingActionButton)
         floatingActionButton.setOnClickListener {
             this.findNavController().navigate(
                 R.id.action_listTaskFragment_to_addTaskFragment
             )
         }
-        return view
+    }
+
+    private fun subscribeObservers() {
+        viewModel.dataState.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is DataState.Success<List<Task>> -> {
+                    displayProgressBar(false)
+                    displayTasks(it.data)
+                }
+                is DataState.Error -> {
+                    displayProgressBar(false)
+                    displayError(it.exception.message)
+                }
+                is DataState.Loading -> {
+                    displayProgressBar(true)
+                }
+            }
+        })
+    }
+
+    private fun displayError(message: String?) {
+        if (message != null) {
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(context, "Unknown error", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun displayProgressBar(isDisplay: Boolean) {
+        progressBar.visibility = if (isDisplay) View.VISIBLE else View.GONE
+    }
+
+    private fun displayTasks(tasks: List<Task>) {
+        val adapter = TasksAdapter(tasks, object : TasksAdapter.Listener {
+            override fun onItemClick(task: Task) {
+                findNavController().navigate(
+                    R.id.action_listTaskFragment_to_taskFragment, bundleOf("task" to task)
+                )
+            }
+        })
+        recyclerView.adapter = adapter
     }
 }

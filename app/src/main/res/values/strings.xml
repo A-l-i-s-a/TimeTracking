@@ -30,4 +30,11 @@
     <string name="day">дн.</string>
     <string name="ok">OK</string>
     <string name="week">нед.</string>
+    <string name="add">Добавить</string>
+    <string name="upload">Upload</string>
+    <string name="toast_data_update">Данные обновлены</string>
+    <string name="delete_attach">Удалить</string>
+    <string name="save_me">Save me</string>
+    <string name="sign_in">Sign In</string>
+    <string name="NO_CONNECTION_ERROR_MESSAGE">No network connection.</string>
 </resources>

@@ -35,5 +35,12 @@
         <item name="android:maxLines">1</item>
         <item name="android:textStyle">bold</item>
     </style>
+    <style name="DefaultCardView" parent="CardView">
+        <item name="cardCornerRadius">@dimen/default_corner_radius</item>
+    </style>
+
+    <style name="BaseLayoutStyle">
+        <item name="android:background">@color/backgroundColor</item>
+    </style>
 
 </resources>

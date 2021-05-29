@@ -42,8 +42,8 @@ class TaskAdapter(private val list: List<Task>, private val listener: TaskViewHo
         private var todoIsDone = v.findViewById<CheckBox>(R.id.checkBoxTask)
 
         fun bind(task: Task, listener: Listener) {
-            beginning.text = String.format("%s:%s", task.timeBeginning.hour, task.timeBeginning.minute )
-            end.text = String.format("%s:%s", task.timeEnd.hour, task.timeEnd.minute )
+//            beginning.text = String.format("%s:%s", task.timeBeginning.hour, task.timeBeginning.minute )
+//            end.text = String.format("%s:%s", task.timeEnd.hour, task.timeEnd.minute )
             headline.text = task.headline
             description.text = task.description
             todoIsDone.isChecked = task.todoIsDone

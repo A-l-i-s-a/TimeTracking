@@ -1,117 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/Item"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/editTextHeadline"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/Title"
-        android:inputType="textPersonName"
-        android:autofillHints="" />
-
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/textViewBeginning"
-                style="@style/Title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/beginning" />
-
-            <TextView
-                android:id="@+id/inputDateBeginning"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:gravity="center"
-                android:textAlignment="center" />
-
-            <TextView
-                android:id="@+id/inputTimeBeginning"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:gravity="center"
-                android:textAlignment="center" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/textViewEnd"
-                style="@style/Title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/end" />
-
-            <TextView
-                android:id="@+id/inputDateEnd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:gravity="center"
-                android:textAlignment="center" />
-
-            <TextView
-                android:id="@+id/inputTimeEnd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:gravity="center"
-                android:textAlignment="center" />
-
-        </TableRow>
-
-    </TableLayout>
-
-    <EditText
-        android:id="@+id/editTextPlace"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/place"
-        android:inputType="textPersonName"
-        android:importantForAutofill="no" />
-
-    <Switch
-        android:id="@+id/switchNotification"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/notification"
-        tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-    <EditText
-        android:id="@+id/editTextDescription"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:autofillHints=""
-        android:gravity="start|top"
-        android:hint="@string/description"
-        android:inputType="textMultiLine"
-        android:scrollbars="vertical"
-        android:verticalScrollbarPosition="defaultPosition" />
+        android:padding="16dp"
+        app:layout_anchor="@+id/constraintLayout"
+        app:layout_anchorGravity="center">
 
-    <Button
-        android:id="@+id/buttonCreateTask"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:text="@string/buttonCreate" />
+        <EditText
+            android:id="@+id/editTextHeadline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:ems="10"
+            android:hint="@string/Title"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</LinearLayout>
+        <TableLayout
+            android:id="@+id/tableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextHeadline">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textViewBeginning"
+                    style="@style/Title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/beginning" />
+
+                <TextView
+                    android:id="@+id/inputDateBeginning"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:id="@+id/inputTimeBeginning"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:textAlignment="center" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textViewEnd"
+                    style="@style/Title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/end" />
+
+                <TextView
+                    android:id="@+id/inputDateEnd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:id="@+id/inputTimeEnd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:textAlignment="center" />
+
+            </TableRow>
+
+        </TableLayout>
+
+        <EditText
+            android:id="@+id/editTextPlace"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/place"
+            android:importantForAutofill="no"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
+
+        <Switch
+            android:id="@+id/switchNotification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/notification"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextPlace"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+        <EditText
+            android:id="@+id/editTextDescription"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:autofillHints=""
+            android:gravity="start|top"
+            android:hint="@string/description"
+            android:inputType="textMultiLine"
+            android:scrollbars="vertical"
+            android:verticalScrollbarPosition="defaultPosition"
+            app:layout_constraintBottom_toTopOf="@+id/btn_attach"
+            app:layout_constraintTop_toBottomOf="@+id/switchNotification"
+            tools:layout_editor_absoluteX="16dp" />
+
+        <Button
+            android:id="@+id/btn_attach"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add"
+            app:layout_constraintBottom_toTopOf="@+id/attachRecyclerView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/attachRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/buttonCreateTask"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="MissingConstraints" />
+
+        <Button
+            android:id="@+id/buttonCreateTask"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="@string/buttonCreate"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <include layout="@layout/choice_upload" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,8 +1,11 @@
 package com.example.timetracking.util
 
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.OffsetDateTime
+import java.util.*
 
 
 fun formatDate(date: LocalDate): String {
@@ -22,6 +25,11 @@ fun formatTime(time: LocalTime): String {
     )
 }
 
+fun formatTime(time: Timestamp): String {
+    val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+    return timeFormat.format(time)
+}
+
 fun formatDateTime(dateTime: OffsetDateTime): String {
     return String.format(
         "%s, %s %s %s, %s:%s",
@@ -32,4 +40,14 @@ fun formatDateTime(dateTime: OffsetDateTime): String {
         dateTime.hour,
         dateTime.minute
     )
+}
+
+fun timeStrToMillis(str: String): Long {
+    val parts = str.split(":")
+    var result = 0
+    for (part in parts) {
+        val number = part.toInt()
+        result = result * 60 + number
+    }
+    return result * 1000L * if (parts.size == 2) 60L else 1L
 }

@@ -1,54 +1,36 @@
 package com.example.timetracking.ui.task
 
 import android.app.Application
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.timetracking.database.Task
-import com.example.timetracking.database.TaskDatabaseDao
+import com.example.timetracking.repository.TaskRepository
+import com.example.timetracking.util.DataState
 import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
-class TaskViewModel(
-    private val dataSource: TaskDatabaseDao,
+@ExperimentalCoroutinesApi
+class TaskViewModel @ViewModelInject constructor(
+    private val dataSource: TaskRepository,
     application: Application
 ) : AndroidViewModel(application) {
-    /** Coroutine setup variables */
 
-    /**
-     * viewModelJob allows us to cancel all coroutines started by this ViewModel.
-     */
-    private val viewModelJob = Job()
-    private var _task: Task? = Task()
+    private val _dataState: MutableLiveData<DataState<Task?>> = MutableLiveData()
 
-    val task: Task?
-        get() = _task
+    val dataState: LiveData<DataState<Task?>>
+        get() = _dataState
 
-
-    /**
-     * A [CoroutineScope] keeps track of all coroutines started by this ViewModel.
-     */
-    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
-
-    private suspend fun getTask(id: Long): Task? {
-        return withContext(IO) {
-            dataSource.get(id)
-        }
-    }
-
-    fun findTaskById(id: Long) {
-        uiScope.launch {
-            _task = getTask(id)
-        }
-    }
-
-    private suspend fun update(task: Task) {
-        withContext(IO) {
-            dataSource.update(task)
-        }
-    }
-
-    fun updateTask(task: Task) {
-        uiScope.launch {
-            update(task)
+    fun getTask(id: Long){
+        viewModelScope.launch {
+            dataSource.getTaskById(id)
+                .onEach {
+                    _dataState.value = it
+                }
+                .launchIn(viewModelScope)
         }
     }
 }

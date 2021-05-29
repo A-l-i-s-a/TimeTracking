@@ -1,11 +1,9 @@
-package com.example.timetracking.database
+package com.example.timetracking.repository.local_data_source.room
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import java.time.OffsetDateTime
 
 /**
  * Defines methods for using the Task class with Room.
@@ -13,7 +11,7 @@ import java.time.OffsetDateTime
 @Dao
 interface TaskDatabaseDao {
     @Insert
-    fun insert(task: Task)
+    fun insert(task: TaskCacheEntity)
 
     /**
      * When updating a row with a value already set in a column,
@@ -22,7 +20,7 @@ interface TaskDatabaseDao {
      * @param task new value to write
      */
     @Update
-    fun update(task: Task)
+    fun update(task: TaskCacheEntity)
 
     /**
      * Selects and returns the row that matches the supplied id, which is our key.
@@ -30,7 +28,7 @@ interface TaskDatabaseDao {
      * @param key id to match
      */
     @Query("SELECT * from task_table WHERE id = :key")
-    fun get(key: Long): Task?
+    fun get(key: Long): TaskCacheEntity?
 
     /**
      * Deletes all values from the table.
@@ -45,23 +43,29 @@ interface TaskDatabaseDao {
      * sorted by id in descending order.
      */
     @Query("SELECT * FROM task_table ORDER BY id DESC")
-    fun getAllTasks(): LiveData<List<Task>>
+    fun getAllTasks(): List<TaskCacheEntity>
 
     /**
      * Selects and returns rows of done tasks in the table.
      */
     @Query("SELECT * FROM task_table WHERE todo_is_done = 1 ORDER BY id DESC")
-    fun getDoneTasks(): List<Task>
+    fun getDoneTasks(): List<TaskCacheEntity>
 
     /**
      * Selects and returns rows of not done tasks in the table.
      */
     @Query("SELECT * FROM task_table WHERE todo_is_done = 0 ORDER BY id DESC")
-    fun getTodoTasks(): List<Task>
+    fun getTodoTasks(): List<TaskCacheEntity>
 
     /**
      * Selects and returns rows by date tasks in the table.
      */
     @Query("SELECT * FROM task_table WHERE date(time_beginning) = date(:date) ORDER BY id DESC")
-    fun getTaskByDate(date: OffsetDateTime): LiveData<List<Task>>
+    fun getTaskByDate(date: Long): List<TaskCacheEntity>
+
+    /**
+     * Selects and returns rows by is need synchronization tasks in the table.
+     */
+    @Query("SELECT * FROM task_table WHERE is_need_synchronization = 1")
+    fun getTasksByIsNeedSynchronization(): List<TaskCacheEntity>
 }
